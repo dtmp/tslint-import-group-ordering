@@ -64,7 +64,13 @@ const importDeclarationMatchesRegExpsFactory = (
   if (matchingRuleConfig.absolute) {
     const baseDirectory = path.dirname(path.resolve(sourceFile.fileName));
     try {
-      moduleSpecifier = resolve.sync(moduleSpecifier, {basedir: baseDirectory});
+      moduleSpecifier = resolve.sync(
+        moduleSpecifier,
+        {
+          basedir: baseDirectory,
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        }
+      );
     } catch (e) {
       if (e && e.code === 'MODULE_NOT_FOUND') {
         console.log(e.message);
