@@ -12,6 +12,7 @@ export interface ImportsGroupConfig {
 }
 
 interface SharedMatchingRuleConfig {
+  absolute?: boolean;
   'imports-group': string;
 }
 

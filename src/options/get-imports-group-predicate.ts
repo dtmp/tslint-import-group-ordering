@@ -1,3 +1,5 @@
+import * as resolve from 'resolve';
+import * as path from 'path';
 import { SourceFile, ImportDeclaration } from 'typescript';
 
 import {
@@ -28,10 +30,15 @@ export function getImportsGroupPredicate(
 const getProjectImportsGroupPredicate = (
   sourceFile: SourceFile,
   matchingRuleConfig: ProjectMatchingRuleConfig
-) =>
-  importDeclarationMatchesRegExpsFactory(sourceFile, [
-    new RegExp(matchingRuleConfig.matches)
-  ]);
+) => {
+  return importDeclarationMatchesRegExpsFactory(
+    sourceFile,
+    [
+      new RegExp(matchingRuleConfig.matches)
+    ],
+    matchingRuleConfig
+  );
+}
 
 function getDependenciesImportsGroupPredicate(
   sourceFile: SourceFile,
@@ -45,14 +52,31 @@ function getDependenciesImportsGroupPredicate(
     regExps.push(...getNodeJsModulesRegExps());
   }
 
-  return importDeclarationMatchesRegExpsFactory(sourceFile, regExps);
+  return importDeclarationMatchesRegExpsFactory(sourceFile, regExps, matchingRuleConfig);
 }
 
 const importDeclarationMatchesRegExpsFactory = (
   sourceFile: SourceFile,
-  regExps: RegExp[]
-): Predicate<ImportDeclaration> => node =>
-  regExps.some(regExp => regExp.test(getModuleSpecifier(sourceFile, node)));
+  regExps: RegExp[],
+  matchingRuleConfig: DependenciesMatchingRuleConfig|ProjectMatchingRuleConfig
+): Predicate<ImportDeclaration> => (node) => {
+
+
+  let moduleSpecifier = getModuleSpecifier(sourceFile, node);
+  if (matchingRuleConfig.absolute) {
+    const baseDirectory = path.dirname(sourceFile.fileName);
+    try {
+      moduleSpecifier = resolve.sync(moduleSpecifier, {basedir: baseDirectory});
+    } catch (e) {
+      if (e && e.code === 'MODULE_NOT_FOUND') {
+        console.log(e.message);
+      } else {
+        console.error(e);
+      }
+    }
+  }
+  return regExps.some(regExp => regExp.test(moduleSpecifier));
+}
 
 function getModuleSpecifier(sourceFile: SourceFile, node: ImportDeclaration) {
   return removeQuotes(node.moduleSpecifier.getText(sourceFile));

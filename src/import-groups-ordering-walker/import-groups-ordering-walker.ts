@@ -64,9 +64,9 @@ export class ImportGroupsOrderingWalker extends Lint.AbstractWalker<
     }
 
     const { matchingRules } = this.options;
-    const foundMatchingRule = matchingRules.find(matchingRule =>
-      matchingRule.matches(node)
-    );
+    const foundMatchingRule = matchingRules.find((matchingRule) => {
+      return matchingRule.matches(node)
+    });
 
     if (!foundMatchingRule) {
       this.addFailureAtNode(

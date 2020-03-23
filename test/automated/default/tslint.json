@@ -20,6 +20,7 @@
         ],
         "matching-rules": [
           {
+            "absolute": true,
             "type": "project",
             "matches": "^(fabric|common)",
             "imports-group": "fabric and common"

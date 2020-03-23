@@ -1,3 +1,7 @@
+This Plugin is fork from https://github.com/Gelio/tslint-import-group-ordering
+
+---
+
 # TSLint import group ordering rule
 
 [![npm](https://img.shields.io/npm/dw/tslint-import-group-ordering.svg)](https://www.npmjs.com/package/tslint-import-group-ordering)

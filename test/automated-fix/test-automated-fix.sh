@@ -1,11 +1,11 @@
 #!/bin/bash
 
-cp cases cases-backup -r
+cp -r cases cases-backup
 
 (cd ../.. && npx tslint -c test/automated-fix/tslint.json test/automated-fix/cases/*.ts --fix)
 
 DIFF=$(diff -bur cases expected)
-rm cases -r
+rm -r cases
 mv cases-backup cases
 
 if [ -z "$DIFF" ]; then
