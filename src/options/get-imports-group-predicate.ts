@@ -62,7 +62,8 @@ const importDeclarationMatchesRegExpsFactory = (
 ): Predicate<ImportDeclaration> => (node) => {
   let moduleSpecifier = getModuleSpecifier(sourceFile, node);
   if (matchingRuleConfig.absolute) {
-    const baseDirectory = path.dirname(path.resolve(sourceFile.fileName));
+    const modulePath = path.resolve(sourceFile.fileName);
+    const baseDirectory = path.dirname(modulePath);
     try {
       moduleSpecifier = resolve.sync(
         moduleSpecifier,
@@ -73,7 +74,7 @@ const importDeclarationMatchesRegExpsFactory = (
       );
     } catch (e) {
       if (e && e.code === 'MODULE_NOT_FOUND') {
-        console.log(e.message);
+        console.log(`Cannot find module '${moduleSpecifier}' from ${modulePath}`);
       } else {
         console.error(e);
       }
