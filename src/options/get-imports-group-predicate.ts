@@ -68,7 +68,7 @@ const importDeclarationMatchesRegExpsFactory = (
         moduleSpecifier,
         {
           basedir: baseDirectory,
-          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+          extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
         }
       );
     } catch (e) {
