@@ -60,11 +60,9 @@ const importDeclarationMatchesRegExpsFactory = (
   regExps: RegExp[],
   matchingRuleConfig: DependenciesMatchingRuleConfig|ProjectMatchingRuleConfig
 ): Predicate<ImportDeclaration> => (node) => {
-
-
   let moduleSpecifier = getModuleSpecifier(sourceFile, node);
   if (matchingRuleConfig.absolute) {
-    const baseDirectory = path.dirname(sourceFile.fileName);
+    const baseDirectory = path.dirname(path.resolve(sourceFile.fileName));
     try {
       moduleSpecifier = resolve.sync(moduleSpecifier, {basedir: baseDirectory});
     } catch (e) {
