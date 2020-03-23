@@ -74,7 +74,7 @@ const importDeclarationMatchesRegExpsFactory = (
       );
     } catch (e) {
       if (e && e.code === 'MODULE_NOT_FOUND') {
-        console.log(`Cannot find module '${moduleSpecifier}' from ${modulePath}`);
+        console.log(`Cannot find module '${moduleSpecifier}' from '${modulePath}'`);
       } else {
         console.error(e);
       }
